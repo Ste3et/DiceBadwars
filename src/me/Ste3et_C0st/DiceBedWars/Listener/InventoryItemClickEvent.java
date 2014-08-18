@@ -1,4 +1,4 @@
-package me.Ste3et_C0st.BedWars.Listener;
+package me.Ste3et_C0st.DiceBedWars.Listener;
 
 import org.bukkit.entity.Player;
 
