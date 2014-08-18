@@ -1,7 +1,12 @@
 package me.Ste3et_C0st.DiceBedWars.System;
 
+import me.Ste3et_C0st.DiceBedWars.GUI.createItemStack;
+import me.Ste3et_C0st.DiceBedWars.main;
+
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +35,8 @@ public class ArenaManager{
         return null;
     }
 
-    public void addPlayer(Player p, int i) {
+    @SuppressWarnings("deprecation")
+	public void addPlayer(Player p, int i) {
         Arena a = this.getArena(i);
         if (a == null) {
             p.sendMessage("Invalid arena!");
@@ -43,8 +49,11 @@ public class ArenaManager{
         }
  
         a.getPlayers().add(p.getUniqueId());
-
-        p.teleport(a.spawn);
+        p.getInventory().clear();
+        p.updateInventory();
+        p.teleport(a.Lobby);
+        p.getInventory().setItem(0, createItemStack.returnIS(main.messageHead + "Team wählen", Material.BED, null, 1));
+        p.updateInventory();
     }
     
     public void removePlayer(Player p) {
@@ -68,11 +77,12 @@ public class ArenaManager{
 
     public Arena createArena(Location l) {        
         this.arenaSize++;
+		return null;
  
-        Arena a = new Arena(l, this.arenaSize);
-        this.arenas.add(a);
+       // Arena a = new Arena(l, this.arenaSize);
+       // this.arenas.add(a);
  
-        return a;
+       // return a;
     }
  
     public boolean isInGame(Player p) {

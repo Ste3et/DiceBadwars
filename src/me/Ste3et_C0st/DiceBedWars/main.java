@@ -5,7 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class main extends JavaPlugin {
 	
-	String messageHead = "§7[§Bedwars§7] ";
+	public static String messageHead = "§7[§Bedwars§7] ";
 	Plugin instance = null;
 	
 	public void onEnable(){

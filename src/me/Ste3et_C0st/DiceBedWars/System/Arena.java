@@ -1,7 +1,9 @@
 package me.Ste3et_C0st.DiceBedWars.System;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
  
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 
@@ -12,12 +14,42 @@ import java.util.UUID;
 public class Arena { 
 
     Integer id;
-    Location spawn;
+    Location Lobby;
+    Location Exit;
+    Location Spawn1;
+    Location Spawn2;
+    Location Spawn3;
+    Location Spawn4;
+    
     List<UUID> players = new ArrayList<UUID>();
     List<Team> teams = new ArrayList<Team>();
+    List<Block> blocklist = new ArrayList<Block>();
     
-    public Arena(Location spawn, int id) {
-        this.spawn = spawn;
+    
+    public Arena(Location lobby, Location exit, Location s1, Location s2 ,Location s3, Location s4, List<Block> bl, int id) {
+        this.Lobby = lobby;
+        this.Exit = exit;
+        this.Spawn1 = s1;
+        this.Spawn2 = s2;
+        this.Spawn3 = s3;
+        this.Spawn4 = s4;
+        this.blocklist = bl;
+
+        Team t_1 = Bukkit.getScoreboardManager().getNewScoreboard().registerNewTeam("blau");
+        Team t_2 = Bukkit.getScoreboardManager().getNewScoreboard().registerNewTeam("rot");
+        Team t_3 = Bukkit.getScoreboardManager().getNewScoreboard().registerNewTeam("gelb");
+        Team t_4 = Bukkit.getScoreboardManager().getNewScoreboard().registerNewTeam("grün");
+        
+        t_1.setAllowFriendlyFire(false);
+        t_2.setAllowFriendlyFire(false);
+        t_3.setAllowFriendlyFire(false);
+        t_4.setAllowFriendlyFire(false);
+        
+        this.teams.add(t_1);
+        this.teams.add(t_2);
+        this.teams.add(t_3);
+        this.teams.add(t_4);
+        
         this.id = id;
     }
  
