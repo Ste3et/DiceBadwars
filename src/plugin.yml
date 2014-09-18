@@ -1,0 +1,12 @@
+name: DiceBedWars
+version: 1.0
+description: Dicecraft FreezeMinigame
+author: Ste3et_C0st
+website: http://dicecraft.de
+main: me.Ste3et_C0st.DiceBedWars.Main
+depend: [Vault, ProtocolLib, TagAPI, PlayerPoints, BarAPI]
+commands: 
+  bedwars:
+    description:  Display Dicecraft Jump help
+    usage:  /<command>
+    aliases: [bt]
