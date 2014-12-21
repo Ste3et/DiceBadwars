@@ -74,6 +74,74 @@ public class Utils{
 		}
 	}
 	
+	public static int returnColorName(String s){
+		if(s.equalsIgnoreCase("Grün")){
+			return 0;
+		}
+		
+		if(s.equalsIgnoreCase("Blau")){
+			return 1;
+		}
+		
+		if(s.equalsIgnoreCase("Rot")){
+			return 2;
+		}
+		
+		if(s.equalsIgnoreCase("Rosa")){
+			return 3;
+		}
+		
+		if(s.equalsIgnoreCase("Gelb")){
+			return 4;
+		}
+		
+		if(s.equalsIgnoreCase("Weiß")){
+			return 5;
+		}
+		
+		if(s.equalsIgnoreCase("Schwarz")){
+			return 6;
+		}
+		
+		if(s.equalsIgnoreCase("Blau")){
+			return 7;
+		}
+		
+		if(s.equalsIgnoreCase("Grün")){
+			return 8;
+		}
+		
+		if(s.equalsIgnoreCase("Türkis")){
+			return 9;
+		}
+
+		if(s.equalsIgnoreCase("Rot")){
+			return 10;
+		}
+		
+		if(s.equalsIgnoreCase("Lila")){
+			return 11;
+		}
+		
+		if(s.equalsIgnoreCase("Orange")){
+			return 12;
+		}
+		
+		if(s.equalsIgnoreCase("Grau")){
+			return 13;
+		}
+		
+		if(s.equalsIgnoreCase("Grau")){
+			return 14;
+		}
+		
+		if(s.equalsIgnoreCase("Türkis")){
+			return 15;
+		}
+		
+		return 0;
+	}
+	
 	public static String returnColor(int i){
 		if(i == 0){
 			return "&a";
@@ -174,72 +242,81 @@ public class Utils{
 			  	}
 
 	public static void sendRound(String string, boolean b, Arena a) {
-		if(b == true){
-			if(a.getPlayers() != null && !a.getPlayers().isEmpty()){
-				if(a.getPlayers().size() > 0){
-					for(Player p : a.getPlayers()){
-						if(p != null){
-							p.sendMessage(Main.head + string);
-						}
-					}
-				}
-			}
-		}else{
-			if(a.getPlayers() != null && !a.getPlayers().isEmpty()){
-				for(Player p : a.getPlayers()){
-					if(p != null){
-						p.sendMessage("§7" + string);
-					}
-				}
-			}
+		if(a.getPlayers() == null){
+			return;
+		}
+		
+		if(a.getPlayers().isEmpty()){
+			return;
+		}
+		
+		if(a.getPlayers().size() <= 0){
+			return;
+		}
+		
+		String s = "";
+		
+		if(b){
+			s = Main.head;
+		}
+		
+		for(Player pl : a.getPlayers()){
+				pl.sendMessage(s + string);
 		}
 
 	}
 	
 	public static void sendRound2(String string, boolean b, Arena a) {
-		if(b == true){
-			if(a.getLobbyPlayer() != null){
-				if(!a.getLobbyPlayer().isEmpty()){
-					for(Player p : a.getLobbyPlayer()){
-						p.sendMessage(Main.head + string);
-					}
-				}
-			}
-		}else{
-			if(a.getLobbyPlayer() != null){
-				if(!a.getLobbyPlayer().isEmpty()){
-					for(Player p : a.getLobbyPlayer()){
-						p.sendMessage("§7" + string);
-					}
-				}
-			}
+		if(a.getPlayers() == null){
+			return;
 		}
-
+		
+		if(a.getPlayers().isEmpty()){
+			return;
+		}
+		
+		if(a.getPlayers().size() <= 0){
+			return;
+		}
+		
+		String s = "";
+		
+		if(b){
+			s = Main.head;
+		}
+		
+		for(Player pl : a.getLobbyPlayer()){
+				pl.sendMessage(s + string);
+		}
 	}
+	
+	
 	public static void sendRound3(String string, boolean b, Arena a, Player p) {
-		if(b == true){
-			if(a.getLobbyPlayer() != null){
-				if(!a.getLobbyPlayer().isEmpty()){
-					for(Player pl : a.getLobbyPlayer()){
-						if(pl != null){
-							if(pl != p){
-								p.sendMessage(Main.head + string);
-							}
-						}
-					}
-				}
-			}
-		}else{
-			if(a.getLobbyPlayer() != null){
-				if(!a.getLobbyPlayer().isEmpty()){
-					for(Player pl : a.getLobbyPlayer()){
-						if(pl != null){
-							if(pl != p){
-								p.sendMessage("§7" + string);
-							}
-						}
-					}
-				}
+		if(a.isStartet() && !a.isLobby()){
+			sendRound2(string, b, a);
+		}
+		
+		if(a.getLobbyPlayer() == null){
+			return;
+		}
+		
+		if(a.getLobbyPlayer().isEmpty()){
+			return;
+		}
+		
+		if(a.getLobbyPlayer().size() <= 0){
+			return;
+		}
+		
+		String s = "";
+		
+		if(b){
+			s = Main.head;
+		}
+		
+		for(Player pl : a.getLobbyPlayer()){
+			if(pl != p){
+				pl.sendMessage(s + string);
 			}
 		}
 	}

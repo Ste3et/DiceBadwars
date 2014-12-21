@@ -1,60 +1,63 @@
 package me.Ste3et_C0st.GUI.Shop;
 
-import me.Ste3et_C0st.DiceBedWars.Manager.Arena;
-import me.Ste3et_C0st.DiceBedWars.Manager.ArenaManager;
+import me.Ste3et_C0st.DiceBedWars.Team;
 import me.Ste3et_C0st.DiceBedWars.Manager.Editor;
-
+import me.Ste3et_C0st.GUI.VillagerTradeAPI.Merchant;
+import me.Ste3et_C0st.GUI.VillagerTradeAPI.MerchantOffer;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import VilligerTradesAPI.Merchant;
-import VilligerTradesAPI.MerchantOffer;
 
 public class Armor{
 	public static void openInv(Player p) {
-		Merchant inv = new Merchant();
-		inv.setTitle("§dRüstung");
+		Inventory i = Bukkit.getServer().createInventory(null, InventoryType.MERCHANT);
+        p.openInventory(i);
 		
-		Arena a = ArenaManager.getManager().returnArena(p);
-		int i = a.teamGetPlayer(p);
+		
+		Merchant inv = new Merchant();
+	    inv.setTitle("§dRüstung");
+		Team t = Team.getTeam(p);
         Color c1 = null;
         
-        if(a.returnColor(i).equalsIgnoreCase("&a")){
+        if(t.getTeamColor().equalsIgnoreCase("&a")){
         	c1 = Color.fromRGB(16, 255, 8);
-        }else if(a.returnColor(i).equalsIgnoreCase("&b")){
+        }else if(t.getTeamColor().equalsIgnoreCase("&b")){
         	c1 = Color.fromRGB(8, 255, 255);
-        }else if(a.returnColor(i).equalsIgnoreCase("&c")){
+        }else if(t.getTeamColor().equalsIgnoreCase("&c")){
         	c1 = Color.fromRGB(255, 8, 8);
-        }else if(a.returnColor(i).equalsIgnoreCase("&d")){
+        }else if(t.getTeamColor().equalsIgnoreCase("&d")){
         	c1 = Color.fromRGB(255, 8, 251);
-        }else if(a.returnColor(i).equalsIgnoreCase("&e")){
+        }else if(t.getTeamColor().equalsIgnoreCase("&e")){
         	c1 = Color.fromRGB(247, 255, 8);
-        }else if(a.returnColor(i).equalsIgnoreCase("&f")){
+        }else if(t.getTeamColor().equalsIgnoreCase("&f")){
         	c1 = Color.fromRGB(255, 255, 255);
-        }else if(a.returnColor(i).equalsIgnoreCase("&0")){
+        }else if(t.getTeamColor().equalsIgnoreCase("&0")){
         	c1 = Color.fromRGB(000, 000, 000);
-        }else if(a.returnColor(i).equalsIgnoreCase("&1")){
+        }else if(t.getTeamColor().equalsIgnoreCase("&1")){
         	c1 = Color.fromRGB(0, 70, 145);
-        }else if(a.returnColor(i).equalsIgnoreCase("&2")){
+        }else if(t.getTeamColor().equalsIgnoreCase("&2")){
         	c1 = Color.fromRGB(46, 145, 0);
-        }else if(a.returnColor(i).equalsIgnoreCase("&3")){
+        }else if(t.getTeamColor().equalsIgnoreCase("&3")){
         	c1 = Color.fromRGB(0, 145, 128);
-        }else if(a.returnColor(i).equalsIgnoreCase("&4")){
+        }else if(t.getTeamColor().equalsIgnoreCase("&4")){
            c1 = Color.fromRGB(209, 48, 48);
-        }else if(a.returnColor(i).equalsIgnoreCase("&5")){
+        }else if(t.getTeamColor().equalsIgnoreCase("&5")){
         	c1 = Color.fromRGB(104, 0, 145);
-        }else if(a.returnColor(i).equalsIgnoreCase("&6")){
+        }else if(t.getTeamColor().equalsIgnoreCase("&6")){
         	c1 = Color.fromRGB(209, 192, 0);
-        }else if(a.returnColor(i).equalsIgnoreCase("&7")){
+        }else if(t.getTeamColor().equalsIgnoreCase("&7")){
         	c1 = Color.fromRGB(179, 179, 179);
-        }else if(a.returnColor(i).equalsIgnoreCase("&8")){
+        }else if(t.getTeamColor().equalsIgnoreCase("&8")){
         	c1 = Color.fromRGB(82, 82, 82);
-        }else if(a.returnColor(i).equalsIgnoreCase("&9")){
+        }else if(t.getTeamColor().equalsIgnoreCase("&9")){
         	c1 = Color.fromRGB(85, 3, 166);
         }
 		

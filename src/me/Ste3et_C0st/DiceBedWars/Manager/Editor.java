@@ -12,7 +12,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -73,7 +72,7 @@ public class Editor {
 			p.getInventory().setItem(5, is(Material.SKULL_ITEM, Main.head + "Set Villager", null, 3, 1));
 			p.updateInventory();
 			player.put(p, s);
-			Team.enterTeam(p, s);
+			TeamCreate.enterTeam(p, s);
 		}else{
 			return;
 		}
@@ -109,7 +108,7 @@ public class Editor {
 		if(isInEditor(p)){
 			String a = getEditorName(p);
 			if(getc1(a) == null || getc2(a) == null ||
-			   getExit(a) == null || getlobby(a) == null){
+			   getExit(a) == null || getlobby(a) == null || checkTeams(a, p) == false){
 				Messages.sendMessage(p, "§8=====================", false);
 				Messages.sendMessage(p, "§7Arena Debug", false);
 				Messages.sendMessage(p, "§8=====================", false);
@@ -158,125 +157,17 @@ public class Editor {
 				}
 				
 				
-				if(size.get(a) == 2){
-					if(Team.team1.get(a) == null || Team.team1.get(a) == false){
-						Messages.sendMessage(p, " §7Team 1: §cNot Set", false);
+				for(int i = 0; i <= size.get(a); i++){
+					if(TeamCreate.teams.get(p).get(i) != null){
+						Messages.sendMessage(p, " §7Team (" + i +"): §2Exist", false);
+						if(TeamCreate.teams.get(p).get(i).check()){
+							Messages.sendMessage(p, " §7Team Bed (" + i +"): §2Valid", false);
+						}else{
+							Messages.sendMessage(p, " §7Team Bed (" + i +"): §cERROR", false);
+						}
+						
 					}else{
-						Messages.sendMessage(p, " §7Team 1: §2OK", false);
-					}
-					
-					if(Team.team2.get(a) == null || Team.team2.get(a) == false){
-						Messages.sendMessage(p, " §7Team 2: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 2: §2OK", false);
-					}
-				}else if(size.get(a) == 4){
-					if(Team.team1.get(a) == null || Team.team1.get(a) == false){
-						Messages.sendMessage(p, " §7Team 1: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 1: §2OK", false);
-					}
-					
-					if(Team.team2.get(a) == null || Team.team2.get(a) == false){
-						Messages.sendMessage(p, " §7Team 2: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 2: §2OK", false);
-					}
-					
-					if(Team.team3.get(a) == null || Team.team3.get(a) == false){
-						Messages.sendMessage(p, " §7Team 3: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 3: §2OK", false);
-					}
-					
-					if(Team.team4.get(a) == null || Team.team4.get(a) == false){
-						Messages.sendMessage(p, " §7Team 4: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 4: §2OK", false);
-					}
-				}else if(size.get(a) == 6){
-					if(Team.team1.get(a) == null || Team.team1.get(a) == false){
-						Messages.sendMessage(p, " §7Team 1: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 1: §2OK", false);
-					}
-					
-					if(Team.team2.get(a) == null || Team.team2.get(a) == false){
-						Messages.sendMessage(p, " §7Team 2: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 2: §2OK", false);
-					}
-					
-					if(Team.team3.get(a) == null || Team.team3.get(a) == false){
-						Messages.sendMessage(p, " §7Team 3: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 3: §2OK", false);
-					}
-					
-					if(Team.team4.get(a) == null || Team.team4.get(a) == false){
-						Messages.sendMessage(p, " §7Team 4: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 4: §2OK", false);
-					}
-					
-					if(Team.team5.get(a) == null || Team.team5.get(a) == false){
-						Messages.sendMessage(p, " §7Team 5: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 5: §2OK", false);
-					}
-					
-					if(Team.team6.get(a) == null || Team.team6.get(a) == false){
-						Messages.sendMessage(p, " §7Team 6: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 6: §2OK", false);
-					}
-				}else if(size.get(a) == 8){
-					if(Team.team1.get(a) == null || Team.team1.get(a) == false){
-						Messages.sendMessage(p, " §7Team 1: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 1: §2OK", false);
-					}
-					
-					if(Team.team2.get(a) == null || Team.team2.get(a) == false){
-						Messages.sendMessage(p, " §7Team 2: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 2: §2OK", false);
-					}
-					
-					if(Team.team3.get(a) == null || Team.team3.get(a) == false){
-						Messages.sendMessage(p, " §7Team 3: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 3: §2OK", false);
-					}
-					
-					if(Team.team4.get(a) == null || Team.team4.get(a) == false){
-						Messages.sendMessage(p, " §7Team 4: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 4: §2OK", false);
-					}
-					
-					if(Team.team5.get(a) == null || Team.team5.get(a) == false){
-						Messages.sendMessage(p, " §7Team 5: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 5: §2OK", false);
-					}
-					
-					if(Team.team6.get(a) == null || Team.team6.get(a) == false){
-						Messages.sendMessage(p, " §7Team 6: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 6: §2OK", false);
-					}
-					
-					if(Team.team7.get(a) == null || Team.team7.get(a) == false){
-						Messages.sendMessage(p, " §7Team 7: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 7: §2OK", false);
-					}
-					
-					if(Team.team8.get(a) == null || Team.team8.get(a) == false){
-						Messages.sendMessage(p, " §7Team 8: §cNot Set", false);
-					}else{
-						Messages.sendMessage(p, " §7Team 8: §2OK", false);
+						Messages.sendMessage(p, " §7Team (" + i +"): §cMissing", false);
 					}
 				}
 				
@@ -296,6 +187,22 @@ public class Editor {
 		}
 	}
 	
+	@SuppressWarnings("unused")
+	public static boolean checkTeams(String a, Player p){
+		for(int i = 0; i <= size.get(a); i++){
+			if(TeamCreate.teams.get(p).get(i) != null){
+				if(!TeamCreate.teams.get(p).get(i).check()){
+					return false;
+				}else{
+					return true;
+				}
+			}else{
+				return false;
+			}
+		}
+		return false;
+	}
+	
 	public static void create(Player p){
 		if(!isInEditor(p)){
 			Messages.sendMessage(p, "Du bist nicht im Editor Modus", true);
@@ -304,170 +211,18 @@ public class Editor {
 		if(debug(p) == false){
 			return;
 		}
-		Messages.sendMessage(p, "0", true);
 
-		Messages.sendMessage(p, "0.1", true);
-		
 		String a = player.get(p);
 		
 		if(ArenaManager.getManager().ArenaExist(a)){
 			Messages.sendMessage(p, "Arena Existiert bereits", true);
 			return;
 		}
-		
-		Messages.sendMessage(p, "0.2", true);
+
 		ArenaManager.getManager().createArena(getlobby(a), getc1(a), getc2(a), getExit(a), a, getBuilder(a));
 		int i = ArenaManager.getManager().getIDBackfromName(player.get(p));
 		Arena arena = ArenaManager.getManager().getArena(i);
-		
-		Messages.sendMessage(p, "1", true);
-		if(size.get(a) == 2){
-			arena.team_1_color = Team.team1_c.get(arena.getName());
-			arena.team_2_color = Team.team2_c.get(arena.getName());
-			
-			arena.team_1_name = Team.team1_n.get(arena.getName());
-			arena.team_2_name = Team.team2_n.get(arena.getName());
-			
-			arena.team_1_spawn = Team.team1_s.get(arena.getName());
-			arena.team_2_spawn = Team.team2_s.get(arena.getName());
-			
-			arena.team_1_bed = Team.team1_b.get(arena.getName());
-			arena.team_2_bed = Team.team2_b.get(arena.getName());
-			
-			Bed b1 = (Bed) arena.team_1_bed.getState().getData();
-			Bed b2 = (Bed) arena.team_2_bed.getState().getData();
-			
-			arena.team_1_bed_f = b1.getFacing().getOppositeFace();
-			arena.team_2_bed_f = b2.getFacing().getOppositeFace();
-		}else if(size.get(a) == 4){
-			arena.team_1_color = Team.team1_c.get(arena.getName());
-			arena.team_2_color = Team.team2_c.get(arena.getName());
-			arena.team_3_color = Team.team3_c.get(arena.getName());
-			arena.team_4_color = Team.team4_c.get(arena.getName());
-			
-			arena.team_1_name = Team.team1_n.get(arena.getName());
-			arena.team_2_name = Team.team2_n.get(arena.getName());
-			arena.team_3_name = Team.team3_n.get(arena.getName());
-			arena.team_4_name = Team.team4_n.get(arena.getName());
-			
-			arena.team_1_spawn = Team.team1_s.get(arena.getName());
-			arena.team_2_spawn = Team.team2_s.get(arena.getName());
-			arena.team_3_spawn = Team.team3_s.get(arena.getName());
-			arena.team_4_spawn = Team.team4_s.get(arena.getName());
-			
-			arena.team_1_bed = Team.team1_b.get(arena.getName());
-			arena.team_2_bed = Team.team2_b.get(arena.getName());
-			arena.team_3_bed = Team.team3_b.get(arena.getName());
-			arena.team_4_bed = Team.team4_b.get(arena.getName());
-			
-			Bed b1 = (Bed) arena.team_1_bed.getState().getData();
-			Bed b2 = (Bed) arena.team_2_bed.getState().getData();
-			Bed b3 = (Bed) arena.team_3_bed.getState().getData();
-			Bed b4 = (Bed) arena.team_4_bed.getState().getData();
-			
-			arena.team_1_bed_f = b1.getFacing().getOppositeFace();
-			arena.team_2_bed_f = b2.getFacing().getOppositeFace();
-			arena.team_3_bed_f = b3.getFacing().getOppositeFace();
-			arena.team_4_bed_f = b4.getFacing().getOppositeFace();
-		}else if(size.get(a) == 6){
-			arena.team_1_color = Team.team1_c.get(arena.getName());
-			arena.team_2_color = Team.team2_c.get(arena.getName());
-			arena.team_3_color = Team.team3_c.get(arena.getName());
-			arena.team_4_color = Team.team4_c.get(arena.getName());
-			arena.team_5_color = Team.team5_c.get(arena.getName());
-			arena.team_6_color = Team.team6_c.get(arena.getName());
-			
-			arena.team_1_name = Team.team1_n.get(arena.getName());
-			arena.team_2_name = Team.team2_n.get(arena.getName());
-			arena.team_3_name = Team.team3_n.get(arena.getName());
-			arena.team_4_name = Team.team4_n.get(arena.getName());
-			arena.team_5_name = Team.team5_n.get(arena.getName());
-			arena.team_6_name = Team.team6_n.get(arena.getName());
-			
-			arena.team_1_spawn = Team.team1_s.get(arena.getName());
-			arena.team_2_spawn = Team.team2_s.get(arena.getName());
-			arena.team_3_spawn = Team.team3_s.get(arena.getName());
-			arena.team_4_spawn = Team.team4_s.get(arena.getName());
-			arena.team_5_spawn = Team.team5_s.get(arena.getName());
-			arena.team_6_spawn = Team.team6_s.get(arena.getName());
-			
-			arena.team_1_bed = Team.team1_b.get(arena.getName());
-			arena.team_2_bed = Team.team2_b.get(arena.getName());
-			arena.team_3_bed = Team.team3_b.get(arena.getName());
-			arena.team_4_bed = Team.team4_b.get(arena.getName());
-			arena.team_5_bed = Team.team5_b.get(arena.getName());
-			arena.team_6_bed = Team.team6_b.get(arena.getName());
-			
-			Bed b1 = (Bed) arena.team_1_bed.getState().getData();
-			Bed b2 = (Bed) arena.team_2_bed.getState().getData();
-			Bed b3 = (Bed) arena.team_3_bed.getState().getData();
-			Bed b4 = (Bed) arena.team_4_bed.getState().getData();
-			Bed b5 = (Bed) arena.team_5_bed.getState().getData();
-			Bed b6 = (Bed) arena.team_6_bed.getState().getData();
-			
-			arena.team_1_bed_f = b1.getFacing().getOppositeFace();
-			arena.team_2_bed_f = b2.getFacing().getOppositeFace();
-			arena.team_3_bed_f = b3.getFacing().getOppositeFace();
-			arena.team_4_bed_f = b4.getFacing().getOppositeFace();
-			arena.team_5_bed_f = b5.getFacing().getOppositeFace();
-			arena.team_6_bed_f = b6.getFacing().getOppositeFace();
-		}else if(size.get(a) == 8){
-			arena.team_1_color = Team.team1_c.get(arena.getName());
-			arena.team_2_color = Team.team2_c.get(arena.getName());
-			arena.team_3_color = Team.team3_c.get(arena.getName());
-			arena.team_4_color = Team.team4_c.get(arena.getName());
-			arena.team_5_color = Team.team5_c.get(arena.getName());
-			arena.team_6_color = Team.team6_c.get(arena.getName());
-			arena.team_7_color = Team.team7_c.get(arena.getName());
-			arena.team_8_color = Team.team8_c.get(arena.getName());
-			
-			arena.team_1_name = Team.team1_n.get(arena.getName());
-			arena.team_2_name = Team.team2_n.get(arena.getName());
-			arena.team_3_name = Team.team3_n.get(arena.getName());
-			arena.team_4_name = Team.team4_n.get(arena.getName());
-			arena.team_5_name = Team.team5_n.get(arena.getName());
-			arena.team_6_name = Team.team6_n.get(arena.getName());
-			arena.team_7_name = Team.team7_n.get(arena.getName());
-			arena.team_8_name = Team.team8_n.get(arena.getName());
-			
-			arena.team_1_spawn = Team.team1_s.get(arena.getName());
-			arena.team_2_spawn = Team.team2_s.get(arena.getName());
-			arena.team_3_spawn = Team.team3_s.get(arena.getName());
-			arena.team_4_spawn = Team.team4_s.get(arena.getName());
-			arena.team_5_spawn = Team.team5_s.get(arena.getName());
-			arena.team_6_spawn = Team.team6_s.get(arena.getName());
-			arena.team_7_spawn = Team.team7_s.get(arena.getName());
-			arena.team_8_spawn = Team.team8_s.get(arena.getName());
-			
-			arena.team_1_bed = Team.team1_b.get(arena.getName());
-			arena.team_2_bed = Team.team2_b.get(arena.getName());
-			arena.team_3_bed = Team.team3_b.get(arena.getName());
-			arena.team_4_bed = Team.team4_b.get(arena.getName());
-			arena.team_5_bed = Team.team5_b.get(arena.getName());
-			arena.team_6_bed = Team.team6_b.get(arena.getName());
-			arena.team_7_bed = Team.team7_b.get(arena.getName());
-			arena.team_8_bed = Team.team8_b.get(arena.getName());
-			
-			Bed b1 = (Bed) arena.team_1_bed.getState().getData();
-			Bed b2 = (Bed) arena.team_2_bed.getState().getData();
-			Bed b3 = (Bed) arena.team_3_bed.getState().getData();
-			Bed b4 = (Bed) arena.team_4_bed.getState().getData();
-			Bed b5 = (Bed) arena.team_5_bed.getState().getData();
-			Bed b6 = (Bed) arena.team_6_bed.getState().getData();
-			Bed b7 = (Bed) arena.team_7_bed.getState().getData();
-			Bed b8 = (Bed) arena.team_8_bed.getState().getData();
-			
-			arena.team_1_bed_f = b1.getFacing().getOppositeFace();
-			arena.team_2_bed_f = b2.getFacing().getOppositeFace();
-			arena.team_3_bed_f = b3.getFacing().getOppositeFace();
-			arena.team_4_bed_f = b4.getFacing().getOppositeFace();
-			arena.team_5_bed_f = b5.getFacing().getOppositeFace();
-			arena.team_6_bed_f = b6.getFacing().getOppositeFace();
-			arena.team_7_bed_f = b7.getFacing().getOppositeFace();
-			arena.team_8_bed_f = b8.getFacing().getOppositeFace();
-		}
 
-		Messages.sendMessage(p, "2", true);
 		arena.Gold = gold.get(arena.getName());
 		arena.Bronze = bronze.get(arena.getName());
 		arena.Eisen = eisen.get(arena.getName());
@@ -486,45 +241,24 @@ public class Editor {
 			l.getBlock().setType(Material.AIR);
 		}
 		
+		for(int u = 0; u <= getSize(getEditorName(p)); u++){
+			if(TeamCreate.getTeam(u, p) != null){
+				if(TeamCreate.getTeam(u, p).getSpawn() != null){
+					arena.Teams.add(TeamCreate.getTeam(u, p));
+				}
+			}
+		}
+		
 		Messages.sendMessage(p, "§2Arena wurde erstellt", true);
 		
 		save.saveMap(player.get(p));
-		
-		if(size.get(a) == 2){
-			setbed(arena, 1);
-			setbed(arena, 2);
-		}else if(size.get(a) == 4){
-			setbed(arena, 1);
-			setbed(arena, 2);
-			setbed(arena, 3);
-			setbed(arena, 4);
-		}else if(size.get(a) == 6){
-			setbed(arena, 1);
-			setbed(arena, 2);
-			setbed(arena, 3);
-			setbed(arena, 4);
-			setbed(arena, 5);
-			setbed(arena, 6);
-		}else if(size.get(a) == 8){
-			setbed(arena, 1);
-			setbed(arena, 2);
-			setbed(arena, 3);
-			setbed(arena, 4);
-			setbed(arena, 5);
-			setbed(arena, 6);
-			setbed(arena, 7);
-			setbed(arena, 8);
-		}
-
-		
-		
 	}
 	
 	private static String getBuilder(String a) {
 		return bu.get(a);
 	}
 
-	public static BlockFace getRotation(Player p, int i){
+	public static BlockFace getRotation(Player p, Block b){
 		if(!isInEditor(p)){
 			Messages.sendMessage(p, "Du bist nicht im Editor Modus", true);
 		}
@@ -536,133 +270,8 @@ public class Editor {
 			return null;
 		}
 		
-		if(i == 1){
-			if(Team.team1_b.get(a) != null){
-				Bed b1 = (Bed) Team.team1_b.get(a).getState().getData();
-				return b1.getFacing().getOppositeFace();
-			}else{
-				return null;
-			}
-		}
-		
-		if(i == 2){
-			if(Team.team2_b.get(a) != null){
-				Bed b1 = (Bed) Team.team2_b.get(a).getState().getData();
-				return b1.getFacing().getOppositeFace();
-			}else{
-				return null;
-			}
-		}
-		
-		
-		if(i == 3){
-			if(Team.team3_b.get(a) != null){
-				Bed b1 = (Bed) Team.team3_b.get(a).getState().getData();
-				return b1.getFacing().getOppositeFace();
-			}else{
-				return null;
-			}
-		}
-		
-		if(i == 4){
-			if(Team.team4_b.get(a) != null){
-				Bed b1 = (Bed) Team.team4_b.get(a).getState().getData();
-				return b1.getFacing().getOppositeFace();
-			}else{
-				return null;
-			}
-		}
-		
-		if(i == 5){
-			if(Team.team5_b.get(a) != null){
-				Bed b1 = (Bed) Team.team5_b.get(a).getState().getData();
-				return b1.getFacing().getOppositeFace();
-			}else{
-				return null;
-			}
-		}
-		
-		if(i == 6){
-			if(Team.team6_b.get(a) != null){
-				Bed b1 = (Bed) Team.team6_b.get(a).getState().getData();
-				return b1.getFacing().getOppositeFace();
-			}else{
-				return null;
-			}
-		}
-		
-		if(i == 7){
-			if(Team.team7_b.get(a) != null){
-				Bed b1 = (Bed) Team.team7_b.get(a).getState().getData();
-				return b1.getFacing().getOppositeFace();
-			}else{
-				return null;
-			}
-		}
-		
-		if(i == 8){
-			if(Team.team8_b.get(a) != null){
-				Bed b1 = (Bed) Team.team8_b.get(a).getState().getData();
-				return b1.getFacing().getOppositeFace();
-			}else{
-				return null;
-			}
-		}
-		return null;
-	}
-	
-	@SuppressWarnings("deprecation")
-	public static void setbed(Arena arena, int i){
-		arena.setBedState(i, true);
-		if(arena.getRotation(i) == BlockFace.NORTH){
-            BlockState bedFoot = arena.getBlock(i).getState();
-            BlockState bedHead = bedFoot.getBlock().getRelative(BlockFace.SOUTH).getState();
-            bedFoot.setType(Material.BED_BLOCK);
-            bedHead.setType(Material.BED_BLOCK);
-            bedFoot.setRawData((byte) 0);
-            bedHead.setRawData((byte) 8);
-            bedFoot.update(true, false);
-            bedHead.update(true, true);
-		}else if(arena.getRotation(i) == BlockFace.EAST){
-			Location l = arena.getBed(i);
-			l.getBlock().setType(Material.AIR);
-			l.getBlock().setType(Material.BED_BLOCK);
-			Block block = arena.getBlock(i);
-			BlockState bedFoot = block.getState();
-	        BlockState bedHead = bedFoot.getBlock().getRelative(BlockFace.WEST).getState();
-	        bedFoot.setType(Material.BED_BLOCK);
-	        bedHead.setType(Material.BED_BLOCK);
-            bedFoot.setRawData((byte) 1);
-            bedHead.setRawData((byte) 9);
-	        bedFoot.update(true, false);
-	        bedHead.update(true, true);
-		}else if(arena.getRotation(i) == BlockFace.SOUTH){
-			Location l = arena.getBed(i);
-			l.getBlock().setType(Material.AIR);
-			l.getBlock().setType(Material.BED_BLOCK);
-			Block block = arena.getBlock(i);
-			BlockState bedFoot = block.getState();
-	        BlockState bedHead = bedFoot.getBlock().getRelative(BlockFace.NORTH).getState();
-	        bedFoot.setType(Material.BED_BLOCK);
-	        bedHead.setType(Material.BED_BLOCK);
-            bedFoot.setRawData((byte) 2);
-            bedHead.setRawData((byte) 10);
-	        bedFoot.update(true, false);
-	        bedHead.update(true, true);
-		}else if(arena.getRotation(i) == BlockFace.WEST){
-			Location l = arena.getBed(i);
-			l.getBlock().setType(Material.AIR);
-			l.getBlock().setType(Material.BED_BLOCK);
-			Block block = arena.getBlock(i);
-			BlockState bedFoot = block.getState();
-	        BlockState bedHead = bedFoot.getBlock().getRelative(BlockFace.EAST).getState();
-	        bedFoot.setType(Material.BED_BLOCK);
-	        bedHead.setType(Material.BED_BLOCK);
-            bedFoot.setRawData((byte) 3);
-            bedHead.setRawData((byte) 11);
-	        bedFoot.update(true, false);
-	        bedHead.update(true, true);
-		}
+		Bed b1 = (Bed) b.getState().getData();
+		return b1.getFacing().getOppositeFace();
 	}
 	
 	public static Location getLoc(BlockFace b, Location l){

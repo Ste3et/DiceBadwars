@@ -1,12 +1,11 @@
 package me.Ste3et_C0st.GUI.Shop;
 
 import me.Ste3et_C0st.DiceBedWars.Manager.Editor;
+import me.Ste3et_C0st.GUI.VillagerTradeAPI.Merchant;
+import me.Ste3et_C0st.GUI.VillagerTradeAPI.MerchantOffer;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-
-import VilligerTradesAPI.Merchant;
-import VilligerTradesAPI.MerchantOffer;
 
 public class Chests{
 	public static void openInv(Player p) {

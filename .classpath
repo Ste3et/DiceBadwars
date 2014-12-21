@@ -2,11 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="C:/Users/Matthias/Desktop/TESTPLUGIN/Vault.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Matthias/Desktop/TESTPLUGIN/TagAPI.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Matthias/Desktop/TESTPLUGIN/BarAPI.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Matthias/Desktop/TESTPLUGIN/VilligerTrade-API MCV.1.7.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Matthias/Desktop/TESTPLUGIN/PlayerPoints.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Matthias/Desktop/TESTPLUGIN/craftbukkit-1.7.9-R0.1-20140417.191439-2.jar"/>
+	<classpathentry kind="lib" path="C:/Plugins/jars/Vault.jar"/>
+	<classpathentry kind="lib" path="C:/Plugins/jars/PlayerPoints.jar"/>
+	<classpathentry kind="lib" path="C:/Plugins/jars/ActionAnnouncer.jar"/>
+	<classpathentry kind="lib" path="C:/Plugins/jars/TitleAPI.jar"/>
+	<classpathentry kind="lib" path="C:/Plugins/jars/spigot1657.jar"/>
+	<classpathentry kind="lib" path="C:/Plugins/jars/Shopkeepers.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

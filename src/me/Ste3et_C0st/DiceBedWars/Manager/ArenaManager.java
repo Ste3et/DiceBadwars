@@ -1,9 +1,14 @@
 package me.Ste3et_C0st.DiceBedWars.Manager;
 
 import me.Ste3et_C0st.DiceBedWars.Main;
+import me.Ste3et_C0st.DiceBedWars.Team;
+import me.Ste3et_C0st.DiceBedWars.Listener.AchievementListener;
 import me.Ste3et_C0st.DiceBedWars.Listener.GameListener;
 import me.Ste3et_C0st.language.Messages;
-import me.confuser.barapi.BarAPI;
+//import me.confuser.barapi.BarAPI;
+
+
+
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,12 +17,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
-import org.kitteh.tag.TagAPI;
+//import org.kitteh.tag.TagAPI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -99,17 +105,17 @@ public class ArenaManager{
         	}
         }
         
-        Utils.sendRound("Der Spieler §2" + p.getName() + " §7ist beigetreten.", true, a);
+        Utils.sendRound("Der Spieler §2" + p.getName() + " §9ist beigetreten.", true, a);
         
         a.getPlayers().add(p);
         p.sendMessage("§6=§e-§6=§e-§6=§e-§6=§e-§6=§e-§6=§e-§6=§e-§6=§e-§6=§e-§6=§e-§6=§e-§6=-§6=§e-§6=§e-§6=§e-§6=§e-§6=");
         String s = a.getName().replaceAll("[0-9]","");
-        p.sendMessage("§7Arena: §6" + s );
+        p.sendMessage("§9Arena: §6" + s );
         String builder = a.getBuilder();
         builder = builder.replace(", ", "");
-        p.sendMessage("§7Erbauer: §c" + builder );
-        p.sendMessage("§7Gewinn: §c" + a.getMoney() + " Tokens");
-        p.sendMessage("§7Teams: §c" + a.getTeamSize());
+        p.sendMessage("§9Erbauer: §c" + builder );
+        p.sendMessage("§9Gewinn: §c" + a.getMoney() + " Tokens");
+        p.sendMessage("§9Teams: §c" + a.getTeamSize());
         p.sendMessage("§6=§e-§6=§e-§6=§e-§6=§e-§6=§e-§6=§e-§6=§e-§6=§e-§6=§e-§6=§e-§6=§e-§6=-§6=§e-§6=§e-§6=§e-§6=§e-§6=");
         
         p.getInventory().setArmorContents(null);
@@ -126,11 +132,30 @@ public class ArenaManager{
         is.setItemMeta(im);
         p.getInventory().setItem(8, is);
         p.updateInventory();
-        if(a.team_1_player.size() > 1 && a.team_2_player.size() > 1 && a.team_3_player.size() > 1 && a.team_4_player.size() > 1 && a.team_5_player.size() > 1 && a.team_6_player.size() > 1 && a.team_7_player.size() > 1 && a.team_8_player.size() > 1){
+        if(a.getTSize() >= 2){
         	if(a.timer_lobby == null){
         		a.lobbytimer();
         	}
         }
+        
+		 if(Main.permission.playerInGroup(p, "Admin") || Main.permission.playerInGroup(p, "Owner") || Main.permission.playerInGroup(p, "Supporter")){
+			 for(String ach : AchievementListener.Achievents){
+				 String sl = ach;
+				 String[] ac = sl.split("#");
+				 Main.permission.playerAdd(p, "-Bedwars." + ac[0]);
+			 }
+		 }
+		 
+		 AchievementListener.setAchivements(p);
+		 
+	        is = new ItemStack(Material.BOOK);
+	        im = is.getItemMeta();
+	        im.setDisplayName(Main.head + "Achievements");
+	        is.setItemMeta(im);
+	        p.getInventory().setItem(4, is);
+	        
+	        p.updateInventory();
+		 
         a.getTabList().put(p, p.getPlayerListName());
         p.setPlayerListName(Utils.trimPlayerName(p.getName(), 16));
         hideP();
@@ -139,37 +164,46 @@ public class ArenaManager{
                 a.updateSign(loc);
         	}
         }   
+        
+        if(!p.getActivePotionEffects().isEmpty()){
+        	for(PotionEffect pe : p.getActivePotionEffects()){
+        		p.removePotionEffect(pe.getType());
+        	}
+        }
     }
     
-    public void hideP(){
+    @SuppressWarnings("deprecation")
+	public void hideP(){
     	List<Player> list1 = new ArrayList<>();
     	List<Player> list2 = new ArrayList<>();
     	
     	for(Player player : Bukkit.getOnlinePlayers()){
     		if(isInGame(player)){
     			list1.add(player);
-    		}else{
+    		}else if(!isInGame(player)){
     			list2.add(player);
     		}
     	}
     	
-        for(Player pl : list1){
+       for(Player pl : list1){
             for(Player player : list1){
-            	if(!pl.canSee(player)){
-            		Arena a1 = ArenaManager.getManager().returnArena(pl);
-            		Arena a2 = ArenaManager.getManager().returnArena(player);
-            		if(a1 != a2){
-            			list2.add(player);
-            		}else{
-            			pl.showPlayer(player);
-            		}
-            	}	
+            	if(returnArena(pl).getId() != returnArena(player).getId()){
+            		pl.hidePlayer(player);
+            	}else{
+            		pl.showPlayer(player);
+            	}
             }
-        	
-        	for(Player player : list2){
-        		pl.hidePlayer(player);
-        	}
-        }
+            
+            for(Player player : list2){
+            	pl.hidePlayer(player);
+            }
+       	}
+       
+       for(Player pl : list2){
+    	   for(Player player : Bukkit.getOnlinePlayers()){
+    		   pl.showPlayer(player);
+    	   }
+       }
     }
 
     @SuppressWarnings("deprecation")
@@ -186,15 +220,22 @@ public class ArenaManager{
             return;
         }
         
-        if(BarAPI.hasBar(p)){
+        /*if(BarAPI.hasBar(p)){
         	BarAPI.removeBar(p);
+        }*/
+        
+        if(!p.getActivePotionEffects().isEmpty()){
+        	for(PotionEffect pe : p.getActivePotionEffects()){
+        		p.removePotionEffect(pe.getType());
+        	}
         }
+        
         p.getEnderChest().clear();
 		p.setFireTicks(0);
 		p.getInventory().clear();
 		p.getInventory().setArmorContents(null);
 		if(a.isLobby() && a.isStartet() == false){
-			 if(!(a.teamSize(1) > 1 && a.teamSize(2) > 1 && a.teamSize(3) > 1 && a.teamSize(4) > 1 && a.teamSize(5) > 1 && a.teamSize(6) > 1 && a.teamSize(7) > 1 && a.teamSize(8) > 1)){
+			 if(!(a.getTSize() >= 2)){
 				 a.CancelLobby();
 				if(a.getPlayers().size() >= 1){
 					Utils.sendRound("Map Start wurde beendet zu wenig Spieler :(", true, a);
@@ -202,10 +243,16 @@ public class ArenaManager{
 			}
 		}
 		a.getLobbyPlayer().remove(p);
-        a.teamRemovePlayer(p, a.teamGetPlayer(p));
-        TagAPI.refreshPlayer(p);
+        a.removeTeamPlayer(p);
+        //TagAPI.refreshPlayer(p);
         p.updateInventory();
         hideP();
+        
+        if(!p.getActivePotionEffects().isEmpty()){
+        	for(PotionEffect pe : p.getActivePotionEffects()){
+        		p.removePotionEffect(pe.getType());
+        	}
+        }
     }
     
     public Arena returnArena(Player p){
@@ -217,143 +264,51 @@ public class ArenaManager{
         return null;
     }
     
-    public boolean checkTeam(Arena a, Player p){
+    public boolean checkTeam(Arena a, Player p, Boolean b){
+    	Team team = null;
     	if(p != null){
+    		team = Team.getTeam(p);
+    		if(team.getSize() - 1 <= 0){
+    			team.setBedState(false);
+    		}
+    		
     		ArenaManager.getManager().removePlayer(p);
     		a.getPlayers().remove(p);
-    	    a.LobbyPlayer.add(p);
+    	    a.getLobbyPlayer().add(p);
     	}
     	
-    	Boolean t1 = a.getBedState(1);
-    	Boolean t2 = a.getBedState(2);
-    	Boolean t3 = a.getBedState(3);
-    	Boolean t4 = a.getBedState(4);
-    	Boolean t5 = a.getBedState(5);
-    	Boolean t6 = a.getBedState(6);
-    	Boolean t7 = a.getBedState(7);
-    	Boolean t8 = a.getBedState(8);
     	Integer i = 0;
     	
-    	if(a.teamSize(1) <= 0){
-    		t1 = false;
-    		a.team_1_player.clear();
+    	for(Team t: a.getTeams()){
+    		if(t != null){
+    			if(t.getSize() <= 0){
+    				t.teamGetList().clear();
+    			}
+    		}
     	}
     	
-    	if(a.teamSize(2) <= 0){
-    		t2 = false;
-    		a.team_2_player.clear();
+    	for(Team t: a.getTeams()){
+    		if(t != null){
+    			if(t.getState() || t.getSize() >= 1){
+    				i = i+ 1;
+    			}
+    		}
     	}
-    	
-    	if(a.teamSize(3) <= 0){
-    		t3 = false;
-    		a.team_3_player.clear();
-    	}
-    	
-    	if(a.teamSize(4) <= 0){
-    		t4 = false;
-    		a.team_4_player.clear();
-    	}
-    	
-    	if(a.teamSize(5) <= 0){
-    		t5 = false;
-    		a.team_5_player.clear();
-    	}
-    	
-    	if(a.teamSize(6) <= 0){
-    		t6 = false;
-    		a.team_6_player.clear();
-    	}
-    	
-    	if(a.teamSize(7) <= 0){
-    		t7 = false;
-    		a.team_7_player.clear();
-    	}
-    	
-    	if(a.teamSize(8) <= 0){
-    		t8 = false;
-    		a.team_8_player.clear();
-    	}
-    	
-    	
-    	if(t1 == true || a.teamSize(1) >= 1){
-    		i = i+ 1;
-    	}
-    	
-    	if(t2 == true || a.teamSize(2) >= 1){
-    		i = i+ 1;
-    	}
-    	
-    	if(t3 == true || a.teamSize(3) >= 1){
-    		i = i+ 1;
-    	}
-    	
-    	if(t4 == true || a.teamSize(4) >= 1){
-    		i = i+ 1;
-    	}
-    	
-    	if(t5 == true || a.teamSize(5) >= 1){
-    		i = i+ 1;
-    	}
-    	
-    	if(t6 == true || a.teamSize(6) >= 1){
-    		i = i+ 1;
-    	}
-    	
-    	if(t7 == true || a.teamSize(7) >= 1){
-    		i = i+ 1;
-    	}
-    	
-    	if(t8 == true || a.teamSize(8) >= 1){
-    		i = i+ 1;
-    	}
-    	
+		
     	if(i == 1){
-    		if(a.teamSize(1) >= 1){
-    			a.Finish(1);
-    			clearArena(a);
-        		return true;
-    		}
-    		
-    		if(a.teamSize(2) >= 1){
-    			a.Finish(2);
-    			clearArena(a);
-        		return true;
-    		}
-    		
-    		if(a.teamSize(3) >= 1){
-    			a.Finish(3);
-    			clearArena(a);
-        		return true;
-    		}
-    		
-    		if(a.teamSize(4) >= 1){
-    			a.Finish(4);
-    			clearArena(a);
-        		return true;
-    		}
-    		
-    		if(a.teamSize(5) >= 1){
-    			a.Finish(5);
-    			clearArena(a);
-        		return true;
-    		}
-    		
-    		if(a.teamSize(6) >= 1){
-    			a.Finish(6);
-    			clearArena(a);
-        		return true;
-    		}
-    		
-    		if(a.teamSize(7) >= 1){
-    			a.Finish(7);
-    			clearArena(a);
-        		return true;
-    		}
-    		
-    		if(a.teamSize(8) >= 1){
-    			a.Finish(8);
-    			clearArena(a);
-        		return true;
+    		for(Team t : a.getTeams()){
+    			if(t != null){
+    				if(t.getSize() >= 1){
+    					if(b == true){
+    						a.Finish(t);
+    					}else{
+    						a.Finish(null);
+    					}
+    					
+    	    			clearArena(a);
+    	        		return true;
+    				}
+    			}
     		}
     	}
 		return false;
@@ -389,35 +344,15 @@ public class ArenaManager{
 		
 		a.cancelSpawner();
 
-    	a.setEnderchest(1, null);
-    	a.setEnderchest(2, null);
-    	a.setEnderchest(3, null);
-    	a.setEnderchest(4, null);
-    	
-    	a.setEnderchest(5, null);
-    	a.setEnderchest(6, null);
-    	a.setEnderchest(7, null);
-    	a.setEnderchest(8, null);
-    	
-		Editor.setbed(a, 1);
-		Editor.setbed(a, 2);
-		Editor.setbed(a, 3);
-		Editor.setbed(a, 4);
-		
-		Editor.setbed(a, 8);
-		Editor.setbed(a, 7);
-		Editor.setbed(a, 6);
-		Editor.setbed(a, 5);
-		
-		a.setBedState(1, true);
-		a.setBedState(2, true);
-		a.setBedState(3, true);
-		a.setBedState(4, true);
-		
-		a.setBedState(5, true);
-		a.setBedState(6, true);
-		a.setBedState(7, true);
-		a.setBedState(8, true);
+		for(Team t : a.getTeams()){
+			if(t != null){
+				if(t.getEnderchest() != null){
+					t.getEnderchest().clear();
+				}
+				t.setBed();
+				t.setBedState(true);
+			}
+		}
 		
 		a.CancelTimer();
 		a.CancelLobby();
@@ -440,21 +375,21 @@ public class ArenaManager{
     
     
     public void clearArena(Arena a){
-    	if(!a.block.isEmpty()){
-    		for(Block b : a.block){
-    			b.setType(Material.AIR);
-    		}
-    	}
-    	
     	List<Entity> entList = a.getCorner1().getWorld().getEntities();
     	for(Entity current : entList){
-            if (current instanceof Item){
+            if (current.getType() != EntityType.VILLAGER ){
             	if(GameListener.isInside(current.getLocation(), a.getCorner1(), a.getCorner2())){
             		current.remove();
             	}
             }
             
         }
+    	
+    	if(!a.block.isEmpty()){
+    		for(Block b : a.block){
+    			b.setType(Material.AIR);
+    		}
+    	}
     }
     
 	public Arena createArena(Location l, Location l1, Location l2, Location l3, String s, String build) {        
@@ -492,7 +427,6 @@ public class ArenaManager{
     	return 987554;
     }
 
-    @SuppressWarnings("deprecation")
 	public void enterSpec(Arena a, Player p){
     	p.getInventory().clear();
     	p.updateInventory();
@@ -515,22 +449,20 @@ public class ArenaManager{
 		Location l = middle.toLocation(a.getCorner1().getWorld());
 		
 		p.teleport(l);
-    	p.getInventory().clear();
-    	p.updateInventory();
-    	p.getInventory().setItem(0, Editor.is(Material.COMPASS, Main.head + "Spieler Wechseln", null, 0, 1));
-    	p.getInventory().setItem(8, Editor.is(Material.NETHER_STAR, Main.head + "Back to the lobby", null, 0, 1));
-    	p.updateInventory();
-		if(!p.getGameMode().equals(GameMode.ADVENTURE)){
-			p.setGameMode(GameMode.ADVENTURE);
-		}
-    	p.setSaturation(Float.MAX_VALUE);
-		p.setCanPickupItems(false);
-		p.setAllowFlight(true);
-		p.setFlying(true);
-		p.setNoDamageTicks(Integer.MAX_VALUE);
+		p.setGameMode(GameMode.SPECTATOR);
 		Main.ghostFactory.addPlayer(p);
 		Main.ghostFactory.setGhost(p, true);
+		hideP();
     }
+
+    public boolean sameTeam(Team t1, Team t2){
+    	if(t1.equals(t2)){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
+    
     
     public void leave(Player p, Boolean exit, Boolean save){
     	if(getSpec(p) != null){
@@ -547,9 +479,12 @@ public class ArenaManager{
         		p.setFlying(false);
         		p.setGameMode(GameMode.ADVENTURE);
         		p.setSaturation((float) 4.0);
+        		Main.ghostFactory.setGhost(p, false);
+        		Main.ghostFactory.removePlayer(p);
         		p.teleport(a.getExit());
         		p.setSaturation((float) 4.0);
         		p.setNoDamageTicks(0);
+        		p.setGameMode(GameMode.SURVIVAL);
     		}else{
     			Arena a = getSpec(p);
         		returnSpec().remove(p);
@@ -560,8 +495,11 @@ public class ArenaManager{
         		p.setFlying(false);
         		p.setSaturation((float) 4.0);
         		p.setNoDamageTicks(0);
+        		Main.ghostFactory.setGhost(p, false);
+        		Main.ghostFactory.removePlayer(p);
         		addPlayer(p, a.getId());
         		p.setSaturation((float) 4.0);
+        		p.setGameMode(GameMode.SURVIVAL);
     		}
     	}
     }
@@ -571,10 +509,11 @@ public class ArenaManager{
 			return false;
 		}
 		
-		if(a.teamGetList(i).size() - 1 <= 0){
-			a.setBedState(i, false);
-			Utils.sendRound("Das Team: " + ChatColor.translateAlternateColorCodes('&', a.getColor(i)) + a.getName(i) + " hat aufgegeben", true, a);
-			if(checkTeam(a, p) == false){
+		if(a.getTeams().get(i).getSize() - 1 <= 0){
+			Team t = a.getTeams().get(i);
+			t.setBedState(false);
+			Utils.sendRound("Das Team: " + ChatColor.translateAlternateColorCodes('&', t.getTeamColor()) + t.getName() + " hat aufgegeben", true, a);
+			if(checkTeam(a, p, false) == false){
 				removePlayer(p);
 				return true;
 			}

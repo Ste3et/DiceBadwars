@@ -4,9 +4,13 @@ description: Dicecraft FreezeMinigame
 author: Ste3et_C0st
 website: http://dicecraft.de
 main: me.Ste3et_C0st.DiceBedWars.Main
-depend: [Vault, ProtocolLib, TagAPI, PlayerPoints, BarAPI]
+depend: [Vault, PlayerPoints, TitleAPI, ActionAnnouncer]
 commands: 
   bedwars:
+    description:  Display Dicecraft Jump help
+    usage:  /<command>
+    aliases: [bt]
+  stats:
     description:  Display Dicecraft Jump help
     usage:  /<command>
     aliases: [bt]

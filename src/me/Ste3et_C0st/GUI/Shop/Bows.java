@@ -1,16 +1,14 @@
 package me.Ste3et_C0st.GUI.Shop;
 
 import me.Ste3et_C0st.DiceBedWars.Manager.Editor;
+import me.Ste3et_C0st.GUI.VillagerTradeAPI.Merchant;
+import me.Ste3et_C0st.GUI.VillagerTradeAPI.MerchantOffer;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import VilligerTradesAPI.Merchant;
-import VilligerTradesAPI.MerchantOffer;
-
 public class Bows{
 	public static void openInv(Player p) {
 		Merchant inv = new Merchant();

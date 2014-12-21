@@ -6,8 +6,6 @@ import java.util.Collections;
 import java.util.List;
 
 import me.Ste3et_C0st.DiceBedWars.Manager.ArenaManager;
-import me.Ste3et_C0st.DiceBedWars.Manager.Editor;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -22,6 +20,8 @@ public class load
   public static config cc;
   public static FileConfiguration fc;
   
+
+  
   public static void loadMap()
   {
 	Main.debug("==================================");
@@ -35,6 +35,7 @@ public class load
 		for(String a : ordner){
 			stringListe.add(a);
 		}
+		
 		
 		Collections.sort(stringListe);
 		
@@ -93,12 +94,10 @@ public class load
 			    ArenaManager.getManager().getArena(AID).setMoney(mone);
 			    Main.debug("    - Money: " + mone);
 			    
-			    int o = 0;
 			    if(fc.isSet("Arena.team")){
 			    	
 			    	for(String s: fc.getConfigurationSection("Arena.team").getKeys(false)){
 			    		Main.debug("  - Team " + s + " wird geladen");	
-			    		int id = Integer.parseInt(s);
 			    		String tName = fc.getString("Arena.team." + s + ".name");
 			    		String tColor = fc.getString("Arena.team." + s + ".color");
 			    		Double tx = fc.getDouble("Arena.team." + s + ".Location.x");
@@ -106,8 +105,6 @@ public class load
 			    		Double tz = fc.getDouble("Arena.team." + s + ".Location.z");
 			    		Float tyaw = Float.valueOf((float) fc.getDouble("Arena.team." + s + ".Location.yaw"));
 			    		Float tpitch = Float.valueOf((float) fc.getDouble("Arena.team." + s + ".Location.pitch"));
-			    		
-			    		o = Integer.parseInt(s); 
 			    		
 			    		Location tSpawn = new Location(w1, tx, ty, tz);
 			    		tSpawn.setPitch(tpitch);
@@ -118,17 +115,12 @@ public class load
 			    		Double bz = fc.getDouble("Arena.team." + s + ".Bed.z");
 			    		String bf = fc.getString("Arena.team." + s + ".Bed.facing");
 			    		
-			    		ArenaManager.getManager().getArena(AID).setSpawn(o, tSpawn);
-			    		ArenaManager.getManager().getArena(AID).setTeamName(o, tName);
-			    		ArenaManager.getManager().getArena(AID).setColor(o, tColor);
-			    		
 			    		Location bed = new Location(w1, bx, by, bz);
 			    		Block block = w1.getBlockAt(bed);
 			    		BlockFace Bf = BlockFace.valueOf(bf);
-			    		
-			    		ArenaManager.getManager().getArena(AID).setFace(id, Bf);
-			    		ArenaManager.getManager().getArena(AID).setBed(id, block);
-			    		Editor.setbed(ArenaManager.getManager().getArena(AID), id);
+			    		Team team = new Team(tColor, tName, tSpawn, block, Bf);
+			    		team.setBed();
+			    		ArenaManager.getManager().getArena(AID).getTeams().add(team);
 			    		Main.debug("----------------------------");	
 			    	}
 			    }
